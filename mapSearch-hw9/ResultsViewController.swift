@@ -18,7 +18,7 @@ struct ResultsItem {
     let fav: Bool?
 }
 
-class ResultsViewController: UITableViewController {
+class ResultsViewController: UIViewController, UITableViewDataSource {
 
     let DOMAIN = "http://mapsearchpike96.rajgs5wdu2.us-west-1.elasticbeanstalk.com"
     var kwd = ""
@@ -28,8 +28,8 @@ class ResultsViewController: UITableViewController {
     var lat = 0.0
     var lon = 0.0
     var resultsArr = [ResultsItem]()
-    //@IBOutlet weak var info: UILabel!
     @IBOutlet var noItemsView: UIView!
+    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,8 +43,8 @@ class ResultsViewController: UITableViewController {
         SwiftSpinner.show("Searching...")
         searchHandler()
         
-        tableView.backgroundView = noItemsView
-        tableView.separatorStyle = .none
+        self.tableView.backgroundView = noItemsView
+        self.tableView.separatorStyle = .none
     }
     
     func searchHandler() {
@@ -129,17 +129,17 @@ class ResultsViewController: UITableViewController {
     
     // MARK: - Table view data source
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return self.resultsArr.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ResultsCell") as! ResultsTableViewCell
         let item = self.resultsArr[indexPath.row]
         cell.iconView.image = UIImage(data: NSData(contentsOf: item.icon as URL)! as Data)
