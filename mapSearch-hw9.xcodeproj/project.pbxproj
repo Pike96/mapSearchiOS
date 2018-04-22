@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		24D5DECF20807C6B005EDD20 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D5DECE20807C6B005EDD20 /* ResultsViewController.swift */; };
 		24D5DED320807CD4005EDD20 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D5DED220807CD4005EDD20 /* MainViewController.swift */; };
+		24E269A2208C763C007D9105 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E269A1208C763C007D9105 /* DetailsViewController.swift */; };
 		24E4F5272087415A00ECAC83 /* ResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E4F5262087415900ECAC83 /* ResultsTableViewCell.swift */; };
 		24F397C1208065CC00B32D49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F397C0208065CC00B32D49 /* AppDelegate.swift */; };
 		24F397C6208065CC00B32D49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24F397C4208065CC00B32D49 /* Main.storyboard */; };
@@ -21,6 +22,7 @@
 		0E75CE59EAAE05264495BBC2 /* Pods_mapSearch_hw9.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mapSearch_hw9.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24D5DECE20807C6B005EDD20 /* ResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
 		24D5DED220807CD4005EDD20 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		24E269A1208C763C007D9105 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		24E4F5262087415900ECAC83 /* ResultsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableViewCell.swift; sourceTree = "<group>"; };
 		24F397BD208065CC00B32D49 /* mapSearch-hw9.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "mapSearch-hw9.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F397C0208065CC00B32D49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				24D5DED220807CD4005EDD20 /* MainViewController.swift */,
 				24D5DECE20807C6B005EDD20 /* ResultsViewController.swift */,
 				24E4F5262087415900ECAC83 /* ResultsTableViewCell.swift */,
+				24E269A1208C763C007D9105 /* DetailsViewController.swift */,
 				24F397C7208065CD00B32D49 /* Assets.xcassets */,
 				24F397C9208065CD00B32D49 /* LaunchScreen.storyboard */,
 				24F397CC208065CD00B32D49 /* Info.plist */,
@@ -247,6 +250,7 @@
 				24F397C1208065CC00B32D49 /* AppDelegate.swift in Sources */,
 				24E4F5272087415A00ECAC83 /* ResultsTableViewCell.swift in Sources */,
 				24D5DECF20807C6B005EDD20 /* ResultsViewController.swift in Sources */,
+				24E269A2208C763C007D9105 /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
