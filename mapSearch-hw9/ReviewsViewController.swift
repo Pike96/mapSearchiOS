@@ -12,6 +12,7 @@ class ReviewsViewController: UIViewController {
     
     var name = ""
     var placeId = ""
+    var place: AnyObject?
 
     override func viewDidLoad() {
         super.viewDidLoad()

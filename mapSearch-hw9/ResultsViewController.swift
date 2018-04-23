@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import Alamofire_SwiftyJSON
 import SwiftSpinner
+import GooglePlaces
 
 struct ResultsItem {
     let name: String?
@@ -34,6 +35,8 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var resultsAll = [AnyObject]()
     var selectedName = ""
     var selectedPlaceId = ""
+    var place: GMSPlace?
+    var placesClient: GMSPlacesClient!
     @IBOutlet var noItemsView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var prevButton: UIButton!
@@ -213,7 +216,30 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         let item = self.resultsArr[indexPath.row]
         self.selectedName = item.name!
         self.selectedPlaceId = item.placeId!
-        self.performSegue(withIdentifier: "showDetails", sender: self)
+        getDetails(placeID: item.placeId!)
+    }
+    
+    func getDetails(placeID: String) {
+        placesClient = GMSPlacesClient.shared()
+        placesClient.lookUpPlaceID(placeID, callback: { (place, error) -> Void in
+            if let error = error {
+                print("lookup place id query error: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let place = place else {
+                print("No place details for \(placeID)")
+                return
+            }
+            
+            self.place = place
+            self.performSegue(withIdentifier: "showDetails", sender: self)
+            
+            print("Place name \(place.name)")
+            print("Place address \(String(describing: place.formattedAddress))")
+            print("Place placeID \(place.placeID)")
+            print("Place attributions \(String(describing: place.attributions))")
+        })
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -224,6 +250,23 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         // set a variable in the second view controller with the String to pass
         detailsViewController.name = self.selectedName
         detailsViewController.placeId = self.selectedPlaceId
+        
+        let infoDes = detailsViewController.viewControllers?[0] as! InfoViewController
+        infoDes.name = self.selectedName
+        infoDes.placeId = self.selectedPlaceId
+        infoDes.placeObj = self.place
+        let photosDes = detailsViewController.viewControllers?[1] as! PhotosViewController
+        photosDes.name = self.selectedName
+        photosDes.placeId = self.selectedPlaceId
+        photosDes.place = self.place
+        let mapDes = detailsViewController.viewControllers?[2] as! MapViewController
+        mapDes.name = self.selectedName
+        mapDes.placeId = self.selectedPlaceId
+        mapDes.place = self.place
+        let reviewsDes = detailsViewController.viewControllers?[3] as! ReviewsViewController
+        reviewsDes.name = self.selectedName
+        reviewsDes.placeId = self.selectedPlaceId
+        reviewsDes.place = self.place
     }
     
 }

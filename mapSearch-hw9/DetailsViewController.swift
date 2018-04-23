@@ -10,6 +10,7 @@ import UIKit
 
 class DetailsViewController: UITabBarController {
 
+    
     var name = ""
     var placeId = ""
     
@@ -69,6 +70,7 @@ class DetailsViewController: UITabBarController {
         myTabBarItem4.image = UIImage(data: data!)?.withRenderingMode(.alwaysTemplate)
         myTabBarItem4.selectedImage = UIImage(data: data!)?.withRenderingMode(.alwaysTemplate)        
     }
+    
     
     /*
     // MARK: - Navigation
