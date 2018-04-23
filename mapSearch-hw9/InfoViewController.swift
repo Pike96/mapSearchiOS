@@ -13,7 +13,12 @@ class InfoViewController: UIViewController {
 
     var name = ""
     var placeId = ""
-    var placeObj: GMSPlace?
+    var address = ""
+    var phone = ""
+    var price = ""
+    var rating = ""
+    var website = ""
+    var googlepage = ""
     @IBOutlet weak var addressText: UITextView!
     @IBOutlet weak var phoneText: UITextView!
     @IBOutlet weak var priceText: UITextView!
@@ -25,20 +30,20 @@ class InfoViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        addressText.text = self.placeObj!.formattedAddress
+        addressText.text = self.address
         addressText.frame.size = addressText.contentSize
-        phoneText.text = self.placeObj!.phoneNumber
-        let price = self.placeObj!.priceLevel.rawValue
-        if (price == -1) {
+        phoneText.text = self.phone
+        let priceNum = Int(self.price)
+        if (priceNum == -1) {
             priceText.text = "Unknown"
-        } else if (price == 0) {
+        } else if (priceNum == 0) {
             priceText.text = "Free"
         } else {
-            priceText.text = String(repeating: "$", count: self.placeObj!.priceLevel.rawValue)
+            priceText.text = String(repeating: "$", count: priceNum!)
         }
         //ratingText.text = self.placeObj!.rating as? String
-        websiteText.text = self.placeObj!.website?.absoluteString
-        //googleText.text = self.placeObj!.
+        websiteText.text = self.website
+        googleText.text = self.googlepage
         
     }
 

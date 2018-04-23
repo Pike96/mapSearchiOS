@@ -10,7 +10,6 @@ import UIKit
 import Alamofire
 import Alamofire_SwiftyJSON
 import SwiftSpinner
-import GooglePlaces
 
 struct ResultsItem {
     let name: String?
@@ -33,10 +32,15 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var nextPageToken = ""
     var resultsArr = [ResultsItem]()
     var resultsAll = [AnyObject]()
+    
     var selectedName = ""
     var selectedPlaceId = ""
-    var place: GMSPlace?
-    var placesClient: GMSPlacesClient!
+    var address = ""
+    var phone = ""
+    var price = ""
+    var rating = ""
+    var website = ""
+    var googlepage = ""
     @IBOutlet var noItemsView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var prevButton: UIButton!
@@ -220,26 +224,18 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func getDetails(placeID: String) {
-        placesClient = GMSPlacesClient.shared()
-        placesClient.lookUpPlaceID(placeID, callback: { (place, error) -> Void in
-            if let error = error {
-                print("lookup place id query error: \(error.localizedDescription)")
-                return
+        Alamofire.request("\(DOMAIN)/details?placeid=\(placeID)", encoding: URLEncoding.default).responseSwiftyJSON { response in
+            if let json = response.result.value {
+                self.address = json["result"]["formatted_address"].stringValue
+                self.phone = json["result"]["international_phone_number"].stringValue
+                self.price = json["result"]["price_level"].stringValue
+                self.rating = json["result"]["rating"].stringValue
+                self.website = json["result"]["website"].stringValue
+                self.googlepage = json["result"]["url"].stringValue
+                
+                self.performSegue(withIdentifier: "showDetails", sender: self)
             }
-            
-            guard let place = place else {
-                print("No place details for \(placeID)")
-                return
-            }
-            
-            self.place = place
-            self.performSegue(withIdentifier: "showDetails", sender: self)
-            
-            print("Place name \(place.name)")
-            print("Place address \(String(describing: place.formattedAddress))")
-            print("Place placeID \(place.placeID)")
-            print("Place attributions \(String(describing: place.attributions))")
-        })
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -250,23 +246,27 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         // set a variable in the second view controller with the String to pass
         detailsViewController.name = self.selectedName
         detailsViewController.placeId = self.selectedPlaceId
+        detailsViewController.address = self.address
+        detailsViewController.website = self.website
         
         let infoDes = detailsViewController.viewControllers?[0] as! InfoViewController
         infoDes.name = self.selectedName
         infoDes.placeId = self.selectedPlaceId
-        infoDes.placeObj = self.place
+        infoDes.address = self.address
+        infoDes.phone = self.phone
+        infoDes.price = self.price
+        infoDes.rating = self.rating
+        infoDes.website = self.website
+        infoDes.googlepage = self.googlepage
         let photosDes = detailsViewController.viewControllers?[1] as! PhotosViewController
         photosDes.name = self.selectedName
         photosDes.placeId = self.selectedPlaceId
-        photosDes.place = self.place
         let mapDes = detailsViewController.viewControllers?[2] as! MapViewController
         mapDes.name = self.selectedName
         mapDes.placeId = self.selectedPlaceId
-        mapDes.place = self.place
         let reviewsDes = detailsViewController.viewControllers?[3] as! ReviewsViewController
         reviewsDes.name = self.selectedName
         reviewsDes.placeId = self.selectedPlaceId
-        reviewsDes.place = self.place
     }
     
 }
