@@ -41,6 +41,8 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var rating = ""
     var website = ""
     var googlepage = ""
+    var detailsLat = 0.0
+    var detailsLon = 0.0
     @IBOutlet var noItemsView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var prevButton: UIButton!
@@ -232,6 +234,8 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
                 self.rating = json["result"]["rating"].stringValue
                 self.website = json["result"]["website"].stringValue
                 self.googlepage = json["result"]["url"].stringValue
+                self.detailsLat = json["result"]["geometry"]["location"]["lat"].doubleValue
+                self.detailsLon = json["result"]["geometry"]["location"]["lng"].doubleValue
                 
                 self.performSegue(withIdentifier: "showDetails", sender: self)
             }
@@ -250,7 +254,6 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         detailsViewController.website = self.website
         
         let infoDes = detailsViewController.viewControllers?[0] as! InfoViewController
-        infoDes.name = self.selectedName
         infoDes.placeId = self.selectedPlaceId
         infoDes.address = self.address
         infoDes.phone = self.phone
@@ -259,11 +262,10 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         infoDes.website = self.website
         infoDes.googlepage = self.googlepage
         let photosDes = detailsViewController.viewControllers?[1] as! PhotosViewController
-        photosDes.name = self.selectedName
         photosDes.placeId = self.selectedPlaceId
         let mapDes = detailsViewController.viewControllers?[2] as! MapViewController
-        mapDes.name = self.selectedName
-        mapDes.placeId = self.selectedPlaceId
+        mapDes.lat = self.detailsLat
+        mapDes.lon = self.detailsLon
         let reviewsDes = detailsViewController.viewControllers?[3] as! ReviewsViewController
         reviewsDes.name = self.selectedName
         reviewsDes.placeId = self.selectedPlaceId

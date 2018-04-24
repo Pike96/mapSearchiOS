@@ -11,7 +11,6 @@ import GooglePlaces
 
 class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
-    var name = ""
     var placeId = ""
     var place: AnyObject?
     var placesClient: GMSPlacesClient!

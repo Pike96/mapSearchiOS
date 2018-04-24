@@ -39,10 +39,10 @@ class InfoViewController: UIViewController {
             priceText.text = "Unknown"
         } else if (priceNum == 0) {
             priceText.text = "Free"
-        } else {
+        } else if priceNum != nil {
             priceText.text = String(repeating: "$", count: priceNum!)
         }
-        ratingStars.rating = Double(self.rating)!
+        ratingStars.rating = Double(self.rating) == nil ? 0.0 : Double(self.rating)!
         ratingStars.settings.updateOnTouch = false
         websiteText.text = self.website
         googleText.text = self.googlepage
