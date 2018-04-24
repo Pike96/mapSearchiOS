@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import Cosmos
 
 class InfoViewController: UIViewController {
 
@@ -22,7 +23,7 @@ class InfoViewController: UIViewController {
     @IBOutlet weak var addressText: UITextView!
     @IBOutlet weak var phoneText: UITextView!
     @IBOutlet weak var priceText: UITextView!
-    @IBOutlet weak var ratingText: UITextView!
+    @IBOutlet weak var ratingStars: CosmosView!
     @IBOutlet weak var websiteText: UITextView!
     @IBOutlet weak var googleText: UITextView!
     
@@ -41,7 +42,8 @@ class InfoViewController: UIViewController {
         } else {
             priceText.text = String(repeating: "$", count: priceNum!)
         }
-        //ratingText.text = self.placeObj!.rating as? String
+        ratingStars.rating = Double(self.rating)!
+        ratingStars.settings.updateOnTouch = false
         websiteText.text = self.website
         googleText.text = self.googlepage
         

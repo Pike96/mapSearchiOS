@@ -7,17 +7,23 @@
 //
 
 import UIKit
+import GooglePlaces
 
-class PhotosViewController: UIViewController {
+class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
     var name = ""
     var placeId = ""
     var place: AnyObject?
+    var placesClient: GMSPlacesClient!
+    var photosArr = [GMSPlacePhotoMetadata]()
+    @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        loadPhotos(placeID: self.placeId)
+        self.collectionView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -25,15 +31,43 @@ class PhotosViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func loadPhotos(placeID: String) {
+        GMSPlacesClient.shared().lookUpPhotos(forPlaceID: placeID) { (photos, error) -> Void in
+            if let error = error {
+                // TODO: handle the error.
+                print("Error: \(error.localizedDescription)")
+            } else {
+                self.photosArr = (photos?.results)!
+                self.collectionView.reloadData()
+            }
+        }
     }
-    */
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.photosArr.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotosCollectionViewCell
+        
+        // Configure the cell
+        let item = self.photosArr[indexPath.row]
+        GMSPlacesClient.shared().loadPlacePhoto(item, callback: {
+            (photo, error) -> Void in
+            if let error = error {
+                // TODO: handle the error.
+                print("Error: \(error.localizedDescription)")
+            } else {
+                cell.imageView.image = photo
+            }
+        })
+        
+        return cell
+    }
 
 }

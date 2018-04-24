@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24014DEE208EC84F003F7C92 /* PhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24014DED208EC84F003F7C92 /* PhotosCollectionViewCell.swift */; };
 		24D5DECF20807C6B005EDD20 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D5DECE20807C6B005EDD20 /* ResultsViewController.swift */; };
 		24D5DED320807CD4005EDD20 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D5DED220807CD4005EDD20 /* MainViewController.swift */; };
 		24E269A2208C763C007D9105 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E269A1208C763C007D9105 /* DetailsViewController.swift */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		0E75CE59EAAE05264495BBC2 /* Pods_mapSearch_hw9.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mapSearch_hw9.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		24014DED208EC84F003F7C92 /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		24D5DECE20807C6B005EDD20 /* ResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
 		24D5DED220807CD4005EDD20 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		24E269A1208C763C007D9105 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				24E269A1208C763C007D9105 /* DetailsViewController.swift */,
 				24E269A3208C8439007D9105 /* InfoViewController.swift */,
 				24E269A5208C84A8007D9105 /* PhotosViewController.swift */,
+				24014DED208EC84F003F7C92 /* PhotosCollectionViewCell.swift */,
 				24E269A7208C84B0007D9105 /* MapViewController.swift */,
 				24E269A9208C84B8007D9105 /* ReviewsViewController.swift */,
 				24F397C7208065CD00B32D49 /* Assets.xcassets */,
@@ -262,6 +265,7 @@
 				24F397C1208065CC00B32D49 /* AppDelegate.swift in Sources */,
 				24E4F5272087415A00ECAC83 /* ResultsTableViewCell.swift in Sources */,
 				24D5DECF20807C6B005EDD20 /* ResultsViewController.swift in Sources */,
+				24014DEE208EC84F003F7C92 /* PhotosCollectionViewCell.swift in Sources */,
 				24E269AA208C84B8007D9105 /* ReviewsViewController.swift in Sources */,
 				24E269A6208C84A8007D9105 /* PhotosViewController.swift in Sources */,
 				24E269A4208C8439007D9105 /* InfoViewController.swift in Sources */,
