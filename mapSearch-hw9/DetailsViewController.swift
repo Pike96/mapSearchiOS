@@ -42,8 +42,6 @@ class DetailsViewController: UITabBarController {
     @objc func share() {
         let url = "https://twitter.com/intent/tweet?text=Check%20out%20\(self.name)%20located%20at%20\(self.address).%20Website:&url=\(self.website)&hashtags=TravelAndEntertainmentSearch"
         let escapedString = url.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
-        print("\(url)")
-        print("\(escapedString)")
         UIApplication.shared.open(URL(string: escapedString)!)
     }
     @objc func fav() {

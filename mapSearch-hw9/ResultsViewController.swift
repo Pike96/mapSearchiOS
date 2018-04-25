@@ -25,6 +25,7 @@ struct ReviewItem {
     let rating: Double?
     let time: String?
     let text: String?
+    let url: String?
 }
 
 class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -52,6 +53,9 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var detailsLat = 0.0
     var detailsLon = 0.0
     var reviews = [ReviewItem]()
+    var city = ""
+    var state = ""
+    var country = ""
     @IBOutlet var noItemsView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var prevButton: UIButton!
@@ -227,8 +231,6 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        // Segue to the second view controller
         let item = self.resultsArr[indexPath.row]
         self.selectedName = item.name!
         self.selectedPlaceId = item.placeId!
@@ -255,9 +257,23 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
                     let rating = i["rating"].doubleValue
                     let time = i["time"].stringValue
                     let text = i["text"].stringValue
+                    let url = i["author_url"].stringValue
                     
-                    let item = ReviewItem(name: name, photo: NSURL(string:photo)!, rating: rating, time: time, text: text)
+                    let item = ReviewItem(name: name, photo: NSURL(string:photo)!, rating: rating, time: time, text: text, url: url)
                     self.reviews.append(item)
+                }
+                
+                let addressArr = json["result"]["address_components"].arrayValue
+                for i in addressArr {
+                    if i["types"][0].stringValue == "locality" {
+                        self.city = i["short_name"].stringValue
+                    }
+                    if i["types"][0].stringValue == "administrative_area_level_1" {
+                        self.state = i["short_name"].stringValue
+                    }
+                    if i["types"][0].stringValue == "country" {
+                        self.country = i["short_name"].stringValue
+                    }
                 }
                 
                 self.performSegue(withIdentifier: "showDetails", sender: self)
@@ -291,6 +307,11 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         mapDes.lon = self.detailsLon
         let reviewsDes = detailsViewController.viewControllers?[3] as! ReviewsViewController
         reviewsDes.reviews = self.reviews
+        reviewsDes.name = self.selectedName
+        reviewsDes.address = self.address
+        reviewsDes.city = self.city
+        reviewsDes.state = self.state
+        reviewsDes.country = self.country
     }
     
 }
