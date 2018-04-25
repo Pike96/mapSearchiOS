@@ -19,6 +19,14 @@ struct ResultsItem {
     let fav: Bool?
 }
 
+struct ReviewItem {
+    let name: String?
+    let photo: NSURL
+    let rating: Double?
+    let time: String?
+    let text: String?
+}
+
 class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     let DOMAIN = "http://mapsearchpike96.rajgs5wdu2.us-west-1.elasticbeanstalk.com"
@@ -43,6 +51,7 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var googlepage = ""
     var detailsLat = 0.0
     var detailsLon = 0.0
+    var reviews = [ReviewItem]()
     @IBOutlet var noItemsView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var prevButton: UIButton!
@@ -95,6 +104,7 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
                         //self.info.text = "has"
                         self.page = 1
                         self.resultsAll = []
+                        self.resultsArr = []
                         let tempArr = json["results"].arrayValue
                         for i in tempArr {
                             let name = i["name"].stringValue
@@ -237,6 +247,19 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
                 self.detailsLat = json["result"]["geometry"]["location"]["lat"].doubleValue
                 self.detailsLon = json["result"]["geometry"]["location"]["lng"].doubleValue
                 
+                self.reviews = []
+                let tempArr = json["result"]["reviews"].arrayValue
+                for i in tempArr {
+                    let name = i["author_name"].stringValue
+                    let photo = i["profile_photo_url"].stringValue
+                    let rating = i["rating"].doubleValue
+                    let time = i["time"].stringValue
+                    let text = i["text"].stringValue
+                    
+                    let item = ReviewItem(name: name, photo: NSURL(string:photo)!, rating: rating, time: time, text: text)
+                    self.reviews.append(item)
+                }
+                
                 self.performSegue(withIdentifier: "showDetails", sender: self)
             }
         }
@@ -267,8 +290,7 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         mapDes.lat = self.detailsLat
         mapDes.lon = self.detailsLon
         let reviewsDes = detailsViewController.viewControllers?[3] as! ReviewsViewController
-        reviewsDes.name = self.selectedName
-        reviewsDes.placeId = self.selectedPlaceId
+        reviewsDes.reviews = self.reviews
     }
     
 }
