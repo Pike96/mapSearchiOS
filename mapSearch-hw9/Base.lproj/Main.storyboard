@@ -430,8 +430,24 @@
                     <tabBarItem key="tabBarItem" title="PHOTOS" id="hen-8g-xWx"/>
                     <connections>
                         <outlet property="collectionView" destination="qOc-K6-XMP" id="qZr-d7-VIK"/>
+                        <outlet property="noItemsView" destination="7eV-Jf-0rb" id="fYC-XG-QMC"/>
                     </connections>
                 </viewController>
+                <view contentMode="scaleToFill" id="7eV-Jf-0rb">
+                    <rect key="frame" x="0.0" y="0.0" width="380" height="652"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="No Photos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RdA-ow-Vqb">
+                            <rect key="frame" x="149" y="302" width="80" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <viewLayoutGuide key="safeArea" id="cB8-cj-TaG"/>
+                </view>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2xn-uC-VDe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="879" y="931"/>

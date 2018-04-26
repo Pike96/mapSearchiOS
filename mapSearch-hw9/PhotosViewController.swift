@@ -16,6 +16,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     var placesClient: GMSPlacesClient!
     var photosArr = [GMSPlacePhotoMetadata]()
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet var noItemsView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,10 +35,16 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         GMSPlacesClient.shared().lookUpPhotos(forPlaceID: placeID) { (photos, error) -> Void in
             if let error = error {
                 // TODO: handle the error.
+                self.collectionView.backgroundView = self.noItemsView
                 print("Error: \(error.localizedDescription)")
             } else {
                 self.photosArr = (photos?.results)!
                 self.collectionView.reloadData()
+                if self.photosArr.count != 0 {
+                    self.collectionView.backgroundView = nil
+                } else {
+                    self.collectionView.backgroundView = self.noItemsView
+                }
             }
         }
     }

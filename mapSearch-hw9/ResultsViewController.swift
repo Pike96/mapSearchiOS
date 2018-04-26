@@ -92,7 +92,6 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableView.backgroundView = self.noItemsView
         self.tableView.separatorStyle = .none
         
-        
     }
     
     func searchHandler() {
@@ -120,6 +119,7 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
                 self.tableView.separatorStyle = .none
                 self.tableView.reloadData()
                 SwiftSpinner.hide()
+                self.view.showToast("Error", position: .bottom, popTime: 3, dismissOnTap: true)
             }
             if let json = response.result.value {
                     if json["status"].string! == "OK" {
@@ -163,6 +163,13 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         if self.page >= self.resultsAll.count {
             Alamofire.request("\(DOMAIN)/nextpage?pagetoken=\(self.nextPageToken)", encoding: URLEncoding.default).responseSwiftyJSON { response in
+                if response.error != nil {
+                    self.tableView.backgroundView = self.noItemsView
+                    self.tableView.separatorStyle = .none
+                    self.tableView.reloadData()
+                    SwiftSpinner.hide()
+                    self.view.showToast("Error", position: .bottom, popTime: 3, dismissOnTap: true)
+                }
                 if let json = response.result.value {
                     //print(json["next_page_token"].stringValue)
                     if json["next_page_token"].stringValue != "" {
@@ -306,6 +313,9 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func getDetails(placeID: String) {
         Alamofire.request("\(DOMAIN)/details?placeid=\(placeID)", encoding: URLEncoding.default).responseSwiftyJSON { response in
+            if response.error != nil {
+                self.view.showToast("Error", position: .bottom, popTime: 3, dismissOnTap: true)
+            }
             if let json = response.result.value {
                 self.address = json["result"]["formatted_address"].stringValue
                 self.phone = json["result"]["international_phone_number"].stringValue

@@ -236,6 +236,9 @@ class MainViewController: UIViewController, GMSAutocompleteViewControllerDelegat
     
     func getDetails(placeID: String) {
         Alamofire.request("\(DOMAIN)/details?placeid=\(placeID)", encoding: URLEncoding.default).responseSwiftyJSON { response in
+            if response.error != nil {
+                self.view.showToast("Error", position: .bottom, popTime: 3, dismissOnTap: true)
+            }
             if let json = response.result.value {
                 self.address = json["result"]["formatted_address"].stringValue
                 self.phone = json["result"]["international_phone_number"].stringValue
