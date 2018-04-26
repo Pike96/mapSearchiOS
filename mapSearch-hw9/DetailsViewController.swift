@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import EasyToast
 
 class DetailsViewController: UITabBarController {
 
@@ -15,8 +16,30 @@ class DetailsViewController: UITabBarController {
     var placeId = ""
     var address = ""
     var website = ""
+    var icon = NSURL()
+    var fav = false
+    
+    var favlist = [Favs]()
     
     @IBOutlet weak var myTabBar: UITabBar!
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        favlist = []
+        if let savedFavs = loadFavs() {
+            favlist += savedFavs
+        }
+    }
+    
+    private func saveFavs() {
+        NSKeyedArchiver.archiveRootObject(favlist, toFile: Favs.ArchiveURL.path)
+    }
+    
+    private func loadFavs() -> [Favs]?  {
+        return NSKeyedUnarchiver.unarchiveObject(withFile: Favs.ArchiveURL.path) as? [Favs]
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,10 +48,15 @@ class DetailsViewController: UITabBarController {
         navigationItem.title = name
         var url = URL(string: "http://cs-server.usc.edu:45678/hw/hw9/images/ios/forward-arrow.png")
         var data = try? Data(contentsOf: url!)
-        let shareButton = UIBarButtonItem.init(image: UIImage(data: data!), style: .done, target: self, action: #selector(DetailsViewController.share))
-        url = URL(string: "http://cs-server.usc.edu:45678/hw/hw9/images/ios/favorite-empty.png")
+        let shareButton = UIBarButtonItem.init(image: UIImage(data: data!), style: .done, target: self, action: #selector(DetailsViewController.shareHandler))
+        if !self.fav {
+            url = URL(string: "http://cs-server.usc.edu:45678/hw/hw9/images/ios/favorite-empty.png")
+        } else {
+            url = URL(string: "http://cs-server.usc.edu:45678/hw/hw9/images/ios/favorite-filled.png")
+        }
+        
         data = try? Data(contentsOf: url!)
-        let favButton = UIBarButtonItem.init(image: UIImage(data: data!), style: .done, target: self, action: #selector(DetailsViewController.fav))
+        let favButton = UIBarButtonItem.init(image: UIImage(data: data!), style: .done, target: self, action: #selector(DetailsViewController.favHandler))
         
         self.navigationItem.rightBarButtonItems = [favButton, shareButton]
         setTabBarItems()
@@ -39,13 +67,30 @@ class DetailsViewController: UITabBarController {
         // Dispose of any resources that can be recreated.
     }
 
-    @objc func share() {
+    @objc func shareHandler() {
         let url = "https://twitter.com/intent/tweet?text=Check%20out%20\(self.name)%20located%20at%20\(self.address).%20Website:&url=\(self.website)&hashtags=TravelAndEntertainmentSearch"
         let escapedString = url.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
         UIApplication.shared.open(URL(string: escapedString)!)
     }
-    @objc func fav() {
-        print("fav")
+    @objc func favHandler() {
+        if !self.fav {
+            let entry = Favs(name: self.name, icon: self.icon, vicinity: self.address, placeId: self.placeId, fav: true)
+            favlist.append(entry!)
+            let url = URL(string: "http://cs-server.usc.edu:45678/hw/hw9/images/ios/favorite-filled.png")
+            let data = try? Data(contentsOf: url!)
+            self.navigationItem.rightBarButtonItems![0].image = UIImage(data: data!)
+            self.view.showToast("\(self.name) was added to favorites", position: .bottom, popTime: 3, dismissOnTap: true)
+        } else {
+            if let i = favlist.index(where: { $0.placeId == self.placeId }) {
+                favlist.remove(at: i)
+            }
+            let url = URL(string: "http://cs-server.usc.edu:45678/hw/hw9/images/ios/favorite-empty.png")
+            let data = try? Data(contentsOf: url!)
+            self.navigationItem.rightBarButtonItems![0].image = UIImage(data: data!)
+            self.view.showToast("\(self.name) was removed from favorites", position: .bottom, popTime: 3, dismissOnTap: true)
+        }
+        self.fav = !self.fav
+        saveFavs()
     }
     
     func setTabBarItems(){

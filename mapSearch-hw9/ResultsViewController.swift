@@ -10,13 +10,14 @@ import UIKit
 import Alamofire
 import Alamofire_SwiftyJSON
 import SwiftSpinner
+import EasyToast
 
 struct ResultsItem {
     let name: String?
     let icon: NSURL
     let vicinity: String?
     let placeId: String?
-    let fav: Bool?
+    var fav: Bool?
 }
 
 struct ReviewItem {
@@ -44,6 +45,8 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     var selectedName = ""
     var selectedPlaceId = ""
+    var fav = false
+    var icon = NSURL()
     var address = ""
     var phone = ""
     var price = ""
@@ -56,10 +59,23 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var city = ""
     var state = ""
     var country = ""
+    
+    var favlist = [Favs]()
+    
     @IBOutlet var noItemsView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var prevButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        favlist = []
+        if let savedFavs = loadFavs() {
+            favlist += savedFavs
+        }
+        self.tableView.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,7 +121,6 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         Alamofire.request("\(DOMAIN)/list?keyword=\(keyword)&category=\(category)&distance=\(distance)&lat=\(lat)&lon=\(lon)").responseSwiftyJSON { response in
                 if let json = response.result.value {
                     if json["status"].string! == "OK" {
-                        //self.info.text = "has"
                         self.page = 1
                         self.resultsAll = []
                         self.resultsArr = []
@@ -137,7 +152,7 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @IBAction func next(_ sender: UIButton) {
-        SwiftSpinner.show("Searching...")
+        SwiftSpinner.show("Loading next page...")
         self.page = self.page + 1
         if self.page != 1 {
             self.prevButton.isEnabled = true
@@ -212,10 +227,18 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ResultsCell") as! ResultsTableViewCell
-        let item = self.resultsArr[indexPath.row]
+        var item = self.resultsArr[indexPath.row]
         cell.iconView.image = UIImage(data: NSData(contentsOf: item.icon as URL)! as Data)
         cell.nameLabel!.text = item.name
         cell.vicinityLabel!.text = item.vicinity
+        
+        if favlist.index(where: { $0.placeId == item.placeId! }) != nil {
+            item.fav = true
+            self.resultsArr[indexPath.row].fav = true
+        } else {
+            item.fav = false
+            self.resultsArr[indexPath.row].fav = false
+        }
         if item.fav! {
             let url = URL(string: "http://cs-server.usc.edu:45678/hw/hw9/images/ios/favorite-filled.png")
             let data = try? Data(contentsOf: url!)
@@ -225,15 +248,57 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
             let data = try? Data(contentsOf: url!)
             cell.favView.image = UIImage(data: data!)
         }
+        
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapEdit(recognizer:)))
+        cell.favView.addGestureRecognizer(recognizer)
+        cell.favView.isUserInteractionEnabled = true
+        
 
         // add code to download the image from fruit.imageURL
         return cell
+    }
+    
+    @objc func tapEdit(recognizer: UITapGestureRecognizer) {
+        let tapLocation = recognizer.location(in: self.tableView)
+        if let tapIndexPath = self.tableView.indexPathForRow(at: tapLocation) {
+            if let cell = self.tableView.cellForRow(at: tapIndexPath) as? ResultsTableViewCell {
+                let item = resultsArr[tapIndexPath.row]
+                if item.fav == false {
+                    let url = URL(string: "http://cs-server.usc.edu:45678/hw/hw9/images/ios/favorite-filled.png")
+                    let data = try? Data(contentsOf: url!)
+                    cell.favView.image = UIImage(data: data!)
+                    self.view.showToast("\(item.name!) was added to favorites", position: .bottom, popTime: 3, dismissOnTap: true)
+                    let entry = Favs(name: item.name!, icon: item.icon, vicinity: item.vicinity!, placeId: item.placeId!, fav: true)
+                    favlist.append(entry!)
+                } else {
+                    let url = URL(string: "http://cs-server.usc.edu:45678/hw/hw9/images/ios/favorite-empty.png")
+                    let data = try? Data(contentsOf: url!)
+                    cell.favView.image = UIImage(data: data!)
+                    self.view.showToast("\(item.name!) was removed from favorites", position: .bottom, popTime: 3, dismissOnTap: true)
+                    if let i = favlist.index(where: { $0.placeId == item.placeId! }) {
+                        favlist.remove(at: i)
+                    }
+                }
+                saveFavs()
+                self.resultsArr[tapIndexPath.row].fav = !self.resultsArr[tapIndexPath.row].fav!
+            }
+        }
+    }
+    
+    private func saveFavs() {
+        NSKeyedArchiver.archiveRootObject(favlist, toFile: Favs.ArchiveURL.path)
+    }
+    
+    private func loadFavs() -> [Favs]?  {
+        return NSKeyedUnarchiver.unarchiveObject(withFile: Favs.ArchiveURL.path) as? [Favs]
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = self.resultsArr[indexPath.row]
         self.selectedName = item.name!
         self.selectedPlaceId = item.placeId!
+        self.fav = item.fav!
+        self.icon = item.icon
         getDetails(placeID: item.placeId!)
     }
     
@@ -291,6 +356,8 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         detailsViewController.placeId = self.selectedPlaceId
         detailsViewController.address = self.address
         detailsViewController.website = self.website
+        detailsViewController.fav = self.fav
+        detailsViewController.icon = self.icon
         
         let infoDes = detailsViewController.viewControllers?[0] as! InfoViewController
         infoDes.placeId = self.selectedPlaceId

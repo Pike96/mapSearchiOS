@@ -10,6 +10,8 @@
 		24014DEE208EC84F003F7C92 /* PhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24014DED208EC84F003F7C92 /* PhotosCollectionViewCell.swift */; };
 		24014DF2208F2FD2003F7C92 /* ReviewsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24014DF1208F2FD2003F7C92 /* ReviewsViewCell.swift */; };
 		24014DF6208F30CD003F7C92 /* ResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24014DF5208F30CD003F7C92 /* ResultsTableViewCell.swift */; };
+		24B39E3E209086830045DEB3 /* FavTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B39E3D209086830045DEB3 /* FavTableViewCell.swift */; };
+		24B39E40209187830045DEB3 /* Favs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B39E3F209187830045DEB3 /* Favs.swift */; };
 		24D5DECF20807C6B005EDD20 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D5DECE20807C6B005EDD20 /* ResultsViewController.swift */; };
 		24D5DED320807CD4005EDD20 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D5DED220807CD4005EDD20 /* MainViewController.swift */; };
 		24E269A2208C763C007D9105 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E269A1208C763C007D9105 /* DetailsViewController.swift */; };
@@ -29,6 +31,8 @@
 		24014DED208EC84F003F7C92 /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		24014DF1208F2FD2003F7C92 /* ReviewsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsViewCell.swift; sourceTree = "<group>"; };
 		24014DF5208F30CD003F7C92 /* ResultsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsTableViewCell.swift; sourceTree = "<group>"; };
+		24B39E3D209086830045DEB3 /* FavTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavTableViewCell.swift; sourceTree = "<group>"; };
+		24B39E3F209187830045DEB3 /* Favs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favs.swift; sourceTree = "<group>"; };
 		24D5DECE20807C6B005EDD20 /* ResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
 		24D5DED220807CD4005EDD20 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		24E269A1208C763C007D9105 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -82,7 +86,9 @@
 				24F397C0208065CC00B32D49 /* AppDelegate.swift */,
 				24F397C4208065CC00B32D49 /* Main.storyboard */,
 				24D5DED220807CD4005EDD20 /* MainViewController.swift */,
+				24B39E3D209086830045DEB3 /* FavTableViewCell.swift */,
 				24D5DECE20807C6B005EDD20 /* ResultsViewController.swift */,
+				24B39E3F209187830045DEB3 /* Favs.swift */,
 				24014DF5208F30CD003F7C92 /* ResultsTableViewCell.swift */,
 				24E269A1208C763C007D9105 /* DetailsViewController.swift */,
 				24E269A3208C8439007D9105 /* InfoViewController.swift */,
@@ -269,12 +275,14 @@
 				24014DF6208F30CD003F7C92 /* ResultsTableViewCell.swift in Sources */,
 				24D5DECF20807C6B005EDD20 /* ResultsViewController.swift in Sources */,
 				24014DF2208F2FD2003F7C92 /* ReviewsViewCell.swift in Sources */,
+				24B39E3E209086830045DEB3 /* FavTableViewCell.swift in Sources */,
 				24014DEE208EC84F003F7C92 /* PhotosCollectionViewCell.swift in Sources */,
 				24E269AA208C84B8007D9105 /* ReviewsViewController.swift in Sources */,
 				24E269A6208C84A8007D9105 /* PhotosViewController.swift in Sources */,
 				24E269A4208C8439007D9105 /* InfoViewController.swift in Sources */,
 				24E269A2208C763C007D9105 /* DetailsViewController.swift in Sources */,
 				24E269A8208C84B0007D9105 /* MapViewController.swift in Sources */,
+				24B39E40209187830045DEB3 /* Favs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
