@@ -61,7 +61,7 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var country = ""
     
     var favlist = [Favs]()
-    
+        
     @IBOutlet var noItemsView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var prevButton: UIButton!
@@ -91,17 +91,13 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         self.tableView.backgroundView = self.noItemsView
         self.tableView.separatorStyle = .none
+        
+        
     }
     
     func searchHandler() {
         if from == "My location" || from == "Your location" {
-            Alamofire.request("http://ip-api.com/json").responseSwiftyJSON { response in
-                if let json = response.result.value {
-                    self.lat = json["lat"].double!
-                    self.lon = json["lon"].double!
-                    self.apiSearch(kwd: self.kwd, ctg: self.ctg, dis: self.dis, lat: self.lat, lon: self.lon)
-                }
-            }
+            self.apiSearch(kwd: self.kwd, ctg: self.ctg, dis: self.dis, lat: self.lat, lon: self.lon)
         } else {
             let loc = from.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
             Alamofire.request("\(DOMAIN)/location?loc=\(loc)", encoding: URLEncoding.default).responseSwiftyJSON { response in
@@ -119,7 +115,13 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         let category = ctg.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
         let distance = dis == "" ? "10" : dis;
         Alamofire.request("\(DOMAIN)/list?keyword=\(keyword)&category=\(category)&distance=\(distance)&lat=\(lat)&lon=\(lon)").responseSwiftyJSON { response in
-                if let json = response.result.value {
+            if response.error != nil {
+                self.tableView.backgroundView = self.noItemsView
+                self.tableView.separatorStyle = .none
+                self.tableView.reloadData()
+                SwiftSpinner.hide()
+            }
+            if let json = response.result.value {
                     if json["status"].string! == "OK" {
                         self.page = 1
                         self.resultsAll = []

@@ -12,6 +12,8 @@ import GooglePlaces
 import Alamofire
 import Alamofire_SwiftyJSON
 import EasyToast
+import MapKit
+import CoreLocation
 
 class MainViewController: UIViewController, GMSAutocompleteViewControllerDelegate, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
 
@@ -50,6 +52,8 @@ class MainViewController: UIViewController, GMSAutocompleteViewControllerDelegat
     var city = ""
     var state = ""
     var country = ""
+    
+    let locationManager = CLLocationManager()
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -104,6 +108,20 @@ class MainViewController: UIViewController, GMSAutocompleteViewControllerDelegat
                 categoryText?.text = selections[0]
             }
         }
+        
+        self.locationManager.requestAlwaysAuthorization()
+        self.locationManager.requestWhenInUseAuthorization()
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        self.lat = locValue.latitude
+        self.lon = locValue.longitude
     }
     
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
@@ -166,7 +184,9 @@ class MainViewController: UIViewController, GMSAutocompleteViewControllerDelegat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavCell") as! FavTableViewCell
         let item = self.favlist[indexPath.row]
-        cell.iconView.image = UIImage(data: NSData(contentsOf: item.icon as URL)! as Data)
+        if let imageData = NSData(contentsOf: item.icon as URL) {
+            cell.iconView.image = UIImage(data: imageData as Data)
+        }
         cell.nameLabel!.text = item.name
         cell.vicinityLabel!.text = item.vicinity
         
@@ -269,6 +289,8 @@ class MainViewController: UIViewController, GMSAutocompleteViewControllerDelegat
             resultsViewController.ctg = self.categoryText.text!
             resultsViewController.dis = self.distanceText.text!
             resultsViewController.from = self.fromText.text!
+            resultsViewController.lat = self.lat
+            resultsViewController.lon = self.lon
         } else if segue.identifier == "favDetails" {
             // get a reference to the second view controller
             let detailsViewController = segue.destination as! DetailsViewController
